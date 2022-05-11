@@ -1,0 +1,21 @@
+{
+    "name": "demonprint",
+    "version": "1.0.0",
+    "description": "Demonio para imprimir mediante uso de un servidor ftp",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon src/index.js",
+        "dev2": "nodemon src/BORRADOR.js",
+        "prod": "node scr/index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Kevin Ramirez",
+    "license": "ISC",
+    "dependencies": {
+        "@thiagoelg/node-printer": "^0.6.2",
+        "fs-extra": "^10.1.0",
+        "html-pdf": "^3.0.1",
+        "nodemon": "^2.0.16",
+        "printer": "^0.4.0"
+    }
+}
