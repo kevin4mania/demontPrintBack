@@ -62,7 +62,7 @@ let main = async(archivos, carpeta) => {
         // console.log(archivoLleno);
         let creacionArchivo = await crearPDF(archivoLleno, nameFile);
         // await imprimir(creacionArchivo);
-        moverArchivos(`${config.RutaCarpetaArchivos}/${carpeta}/${nameFile}`, `${config.RutaCarpetaRespaldosArchivosLeidos}/${carpeta}/${nameFile}`)
+        await moverArchivos(`${config.RutaCarpetaArchivos}/${carpeta}/${nameFile}`, `${config.RutaCarpetaRespaldosArchivosLeidos}/${carpeta}/${nameFile}`)
         console.log("FINAL_>", creacionArchivo);
     }
 };
@@ -86,7 +86,8 @@ let creaDirectoriosRespaldos = async(respaldos) => {
         console.log("Crea DIR", crearCarpeta);
     }
 };
-let moverArchivos = (archivo, dest) => {
+let moverArchivos = async(archivo, dest) => {
+    console.log("Arch:", archivo, "\nDestino:", dest);
     let moverArch = fes.moveSync(archivo, dest);
     console.log("Mover Archivo:", moverArch);
 }

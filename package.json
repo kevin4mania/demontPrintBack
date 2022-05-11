@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "dev": "nodemon src/index.js",
-        "dev2": "nodemon src/BORRADOR.js",
+        "dev2": "nodemon BORRADOR.js",
         "prod": "node scr/index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },

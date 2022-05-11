@@ -5,7 +5,7 @@ module.exports = {
     RutaCarpetaArchivosLeidosPDF: "/home/kevin/Documentos/RECURSOS_AMT_APPs/demonPrint/TEST/RespaldosPDF", //Ruta donde se guardaran los pdf completados
     Documentos: [{
             extension: "FA1",
-            carpeta: "FA",
+            carpeta: "REC",
             modelo: "fa1.html",
         },
         {
@@ -31,6 +31,11 @@ module.exports = {
         {
             extension: "MI",
             carpeta: "MI",
+            modelo: "mi.html",
+        },
+        {
+            extension: "HO",
+            carpeta: "HO",
             modelo: "mi.html",
         },
     ],
