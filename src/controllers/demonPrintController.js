@@ -4,7 +4,7 @@ const printer = require("@thiagoelg/node-printer");
 const pdf = require("html-pdf");
 const pathP = require("path");
 const config = require("../config/gestorImpresion");
-const fes = require('fs-extra')
+const fes = require("fs-extra");
 
 let leerArchivo = async(path, nameFile) => {
     console.log("Nombre a leer->", nameFile);
@@ -48,7 +48,7 @@ let imprimir = async(nameFile) => {
     });
 };
 
-let main = async(archivos, carpeta) => {
+let main = async(archivos, carpeta, opcionLectura) => {
     // let archivos = fs.readdirSync(pathFiles);
     // console.log("Archivos<<", archivos);
     for (let nameFile of archivos) {
@@ -56,15 +56,29 @@ let main = async(archivos, carpeta) => {
         let nameTemplate = config.Documentos.find((doc) => doc.extension == extensionFile);
         let template = pathP.join(config.CarpetaModelos, nameTemplate.modelo);
         let templateHtml = fs.readFileSync(template, { encoding: "utf8" });
-
-        let dataArchivo = await leerArchivo(`${config.RutaCarpetaArchivos}/${carpeta}`, nameFile);
+        let dataArchivo = "";
+        console.log("Opcion-_>", opcionLectura);
+        if (opcionLectura == "1") {
+            dataArchivo = await leerArchivo(`${config.RutaCarpetaArchivos}/${carpeta}`, nameFile);
+        } else if (opcionLectura == "2") {
+            dataArchivo = await leerArchivo(
+                `${config.RutaCarpetaRespaldosArchivosLeidos}/${carpeta}`,
+                nameFile
+            );
+        }
         let archivoLleno = await llenarDataPDF(dataArchivo, templateHtml);
         // console.log(archivoLleno);
         let creacionArchivo = await crearPDF(archivoLleno, nameFile);
         // await imprimir(creacionArchivo);
-        await moverArchivos(`${config.RutaCarpetaArchivos}/${carpeta}/${nameFile}`, `${config.RutaCarpetaRespaldosArchivosLeidos}/${carpeta}/${nameFile}`)
+        if (opcionLectura == "1") {
+            await moverArchivos(
+                `${config.RutaCarpetaArchivos}/${carpeta}/${nameFile}`,
+                `${config.RutaCarpetaRespaldosArchivosLeidos}/${carpeta}/${nameFile}`
+            );
+        }
         console.log("FINAL_>", creacionArchivo);
     }
+    return "Reimpresion Lista";
 };
 let parametrizaciones = async() => {
     let arrCarpetas = [];
@@ -76,7 +90,7 @@ let parametrizaciones = async() => {
         // console.log(carpeta);
         // console.log(archivos);
         await creaDirectoriosRespaldos(`${config.RutaCarpetaRespaldosArchivosLeidos}/${carpeta}`);
-        await main(archivos, carpeta);
+        await main(archivos, carpeta, "1");
     }
     return "Listo";
 };
@@ -87,11 +101,12 @@ let creaDirectoriosRespaldos = async(respaldos) => {
     }
 };
 let moverArchivos = async(archivo, dest) => {
-    console.log("Arch:", archivo, "\nDestino:", dest);
+    // console.log("Arch:", archivo, "\nDestino:", dest);
     let moverArch = fes.moveSync(archivo, dest);
     console.log("Mover Archivo:", moverArch);
-}
+};
 
 module.exports = {
     parametrizaciones,
+    main,
 };
