@@ -5,22 +5,24 @@ const { main } = require("./demonPrintController");
 
 let enviarArchivos = async(req, res) => {
     try {
-        let arrCarpetas = [];
+        // let arrCarpetas = [];
         let arrArchivos = [];
+        let arrArchivosJson = [];
         config.Documentos.find((d) => {
-            arrCarpetas.push(d.carpeta);
-        });
-        for (let carpeta of arrCarpetas) {
-            let archivos = await fs.readdirSync(
-                `${config.RutaCarpetaRespaldosArchivosLeidos}/${carpeta}`
+            let archivos = fs.readdirSync(
+                `${config.RutaCarpetaRespaldosArchivosLeidos}/${d.carpeta}`
             );
             if (archivos.length != 0) {
                 arrArchivos.push(archivos);
             }
+        });
+        arrArchivos = arrArchivos.flat()
+        for (let va of arrArchivos) {
+            arrArchivosJson.push({ 'name': va })
         }
-        responseAPI.success(req, res, "", arrArchivos);
+        responseAPI.success(req, res, "Archivos Listos", arrArchivosJson);
     } catch (error) {
-        responseAPI.error(req, res, "", "999", error);
+        responseAPI.error(req, res, "Ocurrio un error al cargar archivos", "999", error);
     }
 };
 
@@ -30,10 +32,10 @@ let reimprimirArchivo = async(req, res) => {
     let carpeta = config.Documentos.find((doc) => doc.extension == fileExt);
     await main([file], carpeta.carpeta, '2')
         .then((r) => {
-            responseAPI.success(req, res, "", r);
+            responseAPI.success(req, res, "Archivo reimpreso", r);
         })
         .catch((e) => {
-            responseAPI.error(req, res, "", "0010", e);
+            responseAPI.error(req, res, "Ocurrio un error al reimprimir", "0010", e);
         });
 };
 
