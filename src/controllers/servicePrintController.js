@@ -29,8 +29,8 @@ let enviarArchivos = async(req, res) => {
 let reimprimirArchivo = async(req, res) => {
     const { file } = req.params;
     fileExt = file.split(".")[1];
-    let carpeta = config.Documentos.find((doc) => doc.extension == fileExt);
-    await main([file], carpeta.carpeta, '2')
+    // let carpeta = config.Documentos.find((doc) => doc.extension == fileExt);
+    await main([file], '2')
         .then((r) => {
             responseAPI.success(req, res, "Archivo reimpreso", r);
         })

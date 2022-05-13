@@ -5,7 +5,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan"); //dev
 
-const { parametrizaciones } = require("./controllers/demonPrintController");
+const { parametrizaciones, parametrizacionesFTP } = require("./controllers/demonPrintController");
 
 
 const app = express();
@@ -25,6 +25,13 @@ parametrizaciones()
     .catch((err) => {
         console.log(err);
     });
+// parametrizacionesFTP()
+//     .then((res) => {
+//         console.log(res);
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
 
 app.use("/api/gestorImpresion", require("./routes/servicePrintRouter"));
 

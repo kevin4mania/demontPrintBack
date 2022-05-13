@@ -5,6 +5,7 @@ const pdf = require("html-pdf");
 const pathP = require("path");
 const config = require("../config/gestorImpresion");
 const fes = require("fs-extra");
+const Client = require("ftp");
 
 let leerArchivo = async(path, nameFile) => {
     console.log("Nombre a leer->", nameFile);
@@ -48,9 +49,10 @@ let imprimir = async(nameFile) => {
     });
 };
 
-let main = async(archivos, carpeta, opcionLectura) => {
+let main = async(archivos, opcionLectura) => {
     // let archivos = fs.readdirSync(pathFiles);
     // console.log("Archivos<<", archivos);
+    console.log("Archivos");
     for (let nameFile of archivos) {
         let extensionFile = nameFile.split(".")[1];
         let nameTemplate = config.Documentos.find((doc) => doc.extension == extensionFile);
@@ -59,26 +61,43 @@ let main = async(archivos, carpeta, opcionLectura) => {
         let dataArchivo = "";
         console.log("Opcion-_>", opcionLectura);
         if (opcionLectura == "1") {
-            dataArchivo = await leerArchivo(`${config.RutaCarpetaArchivos}/${carpeta}`, nameFile);
+            dataArchivo = await leerArchivo(`${config.RutaCarpetaArchivos}/${nameTemplate.carpeta}`, nameFile);
+            // dataArchivo = await leerArchivo(`${config.RutaCarpetaArchivos}`, nameFile);
         } else if (opcionLectura == "2") {
             dataArchivo = await leerArchivo(
-                `${config.RutaCarpetaRespaldosArchivosLeidos}/${carpeta}`,
+                `${config.RutaCarpetaRespaldosArchivosLeidos}/${nameTemplate.carpeta}`,
                 nameFile
             );
         }
         let archivoLleno = await llenarDataPDF(dataArchivo, templateHtml);
         // console.log(archivoLleno);
         let creacionArchivo = await crearPDF(archivoLleno, nameFile);
-        // await imprimir(creacionArchivo);
+        //** */
+        await imprimir(creacionArchivo);
+        //** */
         if (opcionLectura == "1") {
+            console.log("MOVER ARCHIVOS");
             await moverArchivos(
-                `${config.RutaCarpetaArchivos}/${carpeta}/${nameFile}`,
-                `${config.RutaCarpetaRespaldosArchivosLeidos}/${carpeta}/${nameFile}`
+                // `${config.RutaCarpetaArchivos}/${nameFile}`,
+                `${config.RutaCarpetaArchivos}/${nameTemplate.carpeta}/${nameFile}`,
+                `${config.RutaCarpetaRespaldosArchivosLeidos}/${nameTemplate.carpeta}/${nameFile}`
             );
         }
         console.log("FINAL_>", creacionArchivo);
     }
     return "Reimpresion Lista";
+};
+
+let creaDirectoriosRespaldos = async(respaldos) => {
+    if (!fs.existsSync(respaldos)) {
+        let crearCarpeta = fs.mkdirSync(respaldos, { recursive: true });
+        console.log("Crea DIR", crearCarpeta);
+    }
+};
+let moverArchivos = async(archivo, dest) => {
+    console.log("Arch:", archivo, "\nDestino:", dest);
+    let moverArch = fes.moveSync(archivo, dest);
+    console.log("Mover Archivo:", moverArch);
 };
 let parametrizaciones = async() => {
     let arrCarpetas = [];
@@ -90,23 +109,66 @@ let parametrizaciones = async() => {
         // console.log(carpeta);
         // console.log(archivos);
         await creaDirectoriosRespaldos(`${config.RutaCarpetaRespaldosArchivosLeidos}/${carpeta}`);
-        await main(archivos, carpeta, "1");
+        await main(archivos, "1");
     }
     return "Listo";
 };
-let creaDirectoriosRespaldos = async(respaldos) => {
-    if (!fs.existsSync(respaldos)) {
-        let crearCarpeta = fs.mkdirSync(respaldos, { recursive: true });
-        console.log("Crea DIR", crearCarpeta);
-    }
+
+// let parametrizacionesFTP = async() => {
+//     console.log("METODO ftp");
+//     let arrcarpetas = [];
+//     let c = new Client();
+//     config.Documentos.find((d) => {
+//         arrcarpetas.push(d.carpeta)
+//     });
+//     config.Documentos.find((d) => {
+//         c.on("ready", function() {
+//             c.list(`/${d.carpeta}`, function(err, list) {
+//                 console.log(`Carpeta:${d.carpeta} lista:${list}`);
+//                 list.forEach((fileData) => {
+//                     // console.log(fileData);
+//                     crearFTPArch(c, d.carpeta, fileData.name);
+//                     removeFTPArch(c, d.carpeta, fileData.name); //** */
+//                 });
+//             });
+//             c.end();
+//         });
+
+//     });
+
+//     for (let d of arrcarpetas) {
+//         console.log("Documentos:", d);
+//         await creaDirectoriosRespaldos(`${config.RutaCarpetaRespaldosArchivosLeidos}/${d}`);
+//     }
+//     let archivos = fs.readdirSync(`${config.RutaCarpetaArchivos}`);
+//     console.log("Archivos:-_>", archivos);
+//     await main(archivos, "1");
+
+//     c.connect(config.configFTP);
+
+//     return "LISTO FTP";
+// };
+
+let crearFTPArch = (c, dir, arch) => {
+    c.get(`/${dir}/${arch}`, async function(err, stream) {
+        if (err) throw err;
+        await stream.once("close", function() {
+            c.end();
+        });
+        //TODO: revisar como funciona el pipe con el create
+        await stream.pipe(fs.createWriteStream(`/home/kevin/Documentos/RECURSOS_AMT_APPs/demonPrint/TEST/TMP/${arch}`));
+    });
 };
-let moverArchivos = async(archivo, dest) => {
-    // console.log("Arch:", archivo, "\nDestino:", dest);
-    let moverArch = fes.moveSync(archivo, dest);
-    console.log("Mover Archivo:", moverArch);
-};
+let removeFTPArch = (c, dir, arch) => {
+    c.delete(`/${dir}/${arch}`, function(err, respuesta) {
+        if (err) throw err;
+        console.log("REMOVE FTP", respuesta);
+    });
+}
+
 
 module.exports = {
     parametrizaciones,
     main,
+    // parametrizacionesFTP,
 };
