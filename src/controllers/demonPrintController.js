@@ -26,14 +26,36 @@ let llenarDataPDF = (dataArch, templateHtml) => {
     return templateHtml;
 };
 let crearPDF = async(templateHtml, nameFile) => {
-    nameFile = nameFile.split(".");
-    let pathArchivoPDF = `${config.RutaCarpetaArchivosLeidosPDF}/${nameFile[0]}.pdf`;
-    pdf.create(templateHtml).toFile(pathArchivoPDF, function(err, pdf) {
+    nameFile = nameFile.split(".")[0];
+    let pathArchivoPDF = `${config.RutaCarpetaArchivosLeidosPDF}/${nameFile}.pdf`;
+    pathArchivoPDF = pathArchivoPDF.replace(String.fromCharCode(92), String.fromCharCode(47));
+    // return new Promise((resolve,reject)=>{
+    // console.log("ruta final PDF:", pathArchivoPDF);
+    pdf.create(templateHtml).toFile(pathArchivoPDF, async function(err, pdf) {
         if (err) return console.log(err);
+        // console.log(`Retorno CALL ::${typeof(pdf)}::${pdf.filename}::${pdf}`);
+        await imprimirWIN(pdf.filename).then(r => { console.log("mensaje imp", r) }).catch(e => { console.log("err:", e) });
         return pdf;
     });
-    return pathArchivoPDF;
+    // })
+    // return pathArchivoPDF;
 };
+let imprimirWIN = async(namePDF) => {
+
+    console.log("Nombre metodo:", namePDF);
+    // let msgImprime = await procesoImprimir(namePDF);
+    let msgImprime = await print(namePDF);
+    return msgImprime;
+
+}
+
+async function procesoImprimir(msg) {
+    // return new Promise(resolve => {
+    setTimeout(() => {
+        return ('resolved proceso Impresion:', msg);
+    }, 3000);
+    // });
+}
 let imprimir = async(nameFile) => {
     printer.printFile({
         // filename: `${path}/${nameFile}`,
@@ -62,7 +84,10 @@ let main = async(archivos, opcionLectura) => {
         let dataArchivo = "";
         console.log("Opcion-_>", opcionLectura);
         if (opcionLectura == "1") {
-            dataArchivo = await leerArchivo(`${config.RutaCarpetaArchivos}/${nameTemplate.carpeta}`, nameFile);
+            dataArchivo = await leerArchivo(
+                `${config.RutaCarpetaArchivos}/${nameTemplate.carpeta}`,
+                nameFile
+            );
             // dataArchivo = await leerArchivo(`${config.RutaCarpetaArchivos}`, nameFile);
         } else if (opcionLectura == "2") {
             dataArchivo = await leerArchivo(
@@ -75,9 +100,10 @@ let main = async(archivos, opcionLectura) => {
         let creacionArchivo = await crearPDF(archivoLleno, nameFile);
         //** */
         // await imprimir(creacionArchivo);
-        creacionArchivo = creacionArchivo.replace(String.fromCharCode(92), String.fromCharCode(47))
-        console.log("PATH:", creacionArchivo);
-        print(creacionArchivo).then(console.log).catch(console.log);
+        // creacionArchivo = creacionArchivo.replace(String.fromCharCode(92), String.fromCharCode(47));
+        // console.log("PATH:-->", creacionArchivo);
+        //print(creacionArchivo).then(console.log).catch(console.log);
+        // console.log("***IMPRIME*****", creacionArchivo);
         //** */
         if (opcionLectura == "1") {
             console.log("MOVER ARCHIVOS");
@@ -104,9 +130,8 @@ let moverArchivos = async(nameFile, folder) => {
     console.log("¡Existe?", fs.existsSync(dest));
     if (fs.existsSync(dest)) {
         let dest2 = `${config.RutaCarpetaRespaldosArchivosLeidos}/${folder}/${nameFile}--1`;
-        let numeroC = dest2.split
+        let numeroC = dest2.split;
         let contador = 0;
-
     } else {
         console.log("Arch:", archivo, "\nDestino:", dest);
         let moverArch = fes.moveSync(archivo, dest);
@@ -179,7 +204,6 @@ let parametrizaciones = async() => {
 //         console.log("REMOVE FTP", respuesta);
 //     });
 // }
-
 
 module.exports = {
     parametrizaciones,

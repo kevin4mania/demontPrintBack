@@ -1,10 +1,14 @@
 module.exports = {
-    CarpetaModelos: "E:\\Programacion\\Node\\Modelos", //Ruta donde estan los modelos HTML que se usaran para dar formato
-    RutaCarpetaArchivos: "E:\\Programacion\\RecursosAPP", //Ruta donde estan las carpetas con los archivos que llegan del as400 mediante ftp
+    // CarpetaModelos: "E:\\Programacion\\Node\\Modelos", //Ruta donde estan los modelos HTML que se usaran para dar formato
+    CarpetaModelos: "/home/kevin/Documentos/RECURSOS_AMT_APPs/demonPrint/TEST/Modelos", //Ruta donde estan los modelos HTML que se usaran para dar formato
+    // RutaCarpetaArchivos: "E:\\Programacion\\RecursosAPP", //Ruta donde estan las carpetas con los archivos que llegan del as400 mediante ftp
+    RutaCarpetaArchivos: "/opt/lampp/htdocs", //Ruta donde estan las carpetas con los archivos que llegan del as400 mediante ftp
     // E:\Programacion\RecursosAPP
     // RutaCarpetaArchivos: "/home/kevin/Documentos/RECURSOS_AMT_APPs/demonPrint/TEST/TMP", //Ruta donde estan las carpetas con los archivos que llegan del as400 mediante ftp
-    RutaCarpetaRespaldosArchivosLeidos: "E:\\Programacion\\Node\\Respaldos", //Ruta donde se crearan las carpetas con los archivos as400 ya procesados
-    RutaCarpetaArchivosLeidosPDF: "E:\\Programacion\\Node\\RespaldosPDF", //Ruta donde se guardaran los pdf completados
+    // RutaCarpetaRespaldosArchivosLeidos: "E:\\Programacion\\Node\\Respaldos", //Ruta donde se crearan las carpetas con los archivos as400 ya procesados
+    RutaCarpetaRespaldosArchivosLeidos: "/home/kevin/Documentos/RECURSOS_AMT_APPs/demonPrint/TEST/Respaldos", //Ruta donde se crearan las carpetas con los archivos as400 ya procesados
+    // RutaCarpetaArchivosLeidosPDF: "E:\\Programacion\\Node\\RespaldosPDF", //Ruta donde se guardaran los pdf completados
+    RutaCarpetaArchivosLeidosPDF: "/home/kevin/Documentos/RECURSOS_AMT_APPs/demonPrint/TEST/RespaldosPDF", //Ruta donde se guardaran los pdf completados
     configFTP: {
         host: "192.168.1.192",
         port: "21",
