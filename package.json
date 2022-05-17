@@ -5,6 +5,8 @@
     "main": "index.js",
     "scripts": {
         "dev": "nodemon src/index.js",
+        "devI": "nodemon src/indexImprime.js",
+        "devS": "nodemon src/indexServ.js",
         "prod": "node scr/index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
