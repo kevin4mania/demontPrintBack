@@ -24,12 +24,12 @@ let moverArchivos = async(nameFile, folder) => {
     console.log("Arch:", archivo, "\nDestino:", dest);
     // console.log("¡Existe?", fs.existsSync(dest));
     if (fs.existsSync(dest)) {
-        // let dest2 = `${config.RutaCarpetaRespaldosArchivosLeidos}/${folder}/${nameFile}--1`;
-        // let numeroC = dest2.split;
-        // let contador = 0;
-        dest = `${config.RutaCarpetaArchivosLeidosPDF}/R/${nameFile}`;
-        let moverArch = fes.moveSync(archivo, dest);
-        console.log("Mover Archivo2:", moverArch);
+        try {
+            fs.unlinkSync(archivo)
+            console.log('File removed')
+        } catch (err) {
+            console.error('Something wrong happened removing the file', err)
+        }
     } else {
 
         let moverArch = fes.moveSync(archivo, dest);
