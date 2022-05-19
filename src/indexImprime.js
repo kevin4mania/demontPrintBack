@@ -40,6 +40,8 @@ let moverArchivos = async(nameFile, folder) => {
 let imprimirWIN = async(pathPDF, namePDF) => {
     // let msgImprime = await procesoImprimir(namePDF);
     // let msgImprime = await print(namePDF);
+    // portrait
+    // , { orientation: "landscape" }
     print(`${pathPDF}/${namePDF}`)
         .then(async(res) => {
             let msgMueve = await moverArchivos(namePDF, pathPDF);

@@ -25,15 +25,58 @@ let llenarDataPDF = (dataArch, templateHtml) => {
     }
     return templateHtml;
 };
+let llenarPDF_lS = (dataArch, templateHtml) => {
+    let vec = dataArch.split("\n");
+    let cont = 1;
+    for (let data of vec) {
+        let vec2 = data.split("=");
+        if (vec2.length == 2) {
+            if (vec2[0].trim() != "TABDATOS") {
+                // console.log("\nNOO TABDATOS");
+                // console.log(`REEMPLAZAR--> Clave:{{${vec2[0].trim()}}} | valor:${vec2[1].trim()}`);
+                templateHtml = templateHtml.replace(`{{${vec2[0].trim()}}}`, vec2[1].trim());
+                // console.log(`Typo:${typeof(templateHtml)}, \n tempalte-->:${templateHtml}`);
+                if (vec2[0].trim() == "TOTAL REGISTROS") {
+                    let codhtml = '<table>'
+                    let numeroRegistros = vec2[0].trim() == 'TOTAL REGISTROS' ? vec2[1].trim() : 0;
+                    // console.log(`Numero de registros:${typeof(numeroRegistros)}-->${numeroRegistros} **${typeof(parseInt(numeroRegistros))} -->${parseInt(numeroRegistros)}`);
+                    for (let k = 1; k <= parseInt(numeroRegistros); k++) {
+                        // codhtml += `{{TABDATOS${k}}}<br>`;
+                        codhtml += `<tr><td>{{TABDATOS${k}-1}}</td><td>{{TABDATOS${k}-2}}</td><td>{{TABDATOS${k}-3}}</td><td>{{TABDATOS${k}-4}}</td><td>{{TABDATOS${k}-5}}</td><td>{{TABDATOS${k}-6}}</td><td>{{TABDATOS${k}-7}}</td><td>{{TABDATOS${k}-8}}</td><td>{{TABDATOS${k}-9}}</td></tr>`;
+                    }
+                    codhtml += '</table>';
+                    templateHtml = templateHtml.replace('{{DATA}}', codhtml);
+                }
+                console.log("\n\nTEMPALTE ACTUALIZADO:-------------\n", templateHtml);
+            } else if (vec2[0].trim() == "TABDATOS") {
+                let n = cont++;
+                let arrData = vec2[1].trim().split(',');
+                console.log(`REEMPLAZAR--> Clave:{{${vec2[0].trim()}${n}}} | valor:${vec2[1].trim()}`);
+                // templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}}}`, vec2[1].trim());
+                templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-1}}`, arrData[0]);
+                templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-2}}`, arrData[1]);
+                templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-3}}`, arrData[2]);
+                templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-4}}`, arrData[3]);
+                templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-5}}`, arrData[4]);
+                templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-6}}`, arrData[5]);
+                templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-7}}`, arrData[6]);
+                templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-8}}`, arrData[7]);
+                templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-9}}`, arrData[8]);
+                // templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}}}`, vec2[1].trim());
+            }
+        }
+    }
+    return templateHtml;
+}
 
-
-let crearPDF = async(templateHtml, nameFile) => {
+let crearPDF = async(templateHtml, nameFile, oriention) => {
     nameFile = nameFile.split(".")[0];
     // let pathArchivoPDF = `${config.RutaCarpetaArchivosLeidosPDF}/${nameFile}.pdf`;
     console.log("DIR_:", __dirname);
     let pathArchivoPDF = `${__dirname}/../TMP/${nameFile}.pdf`;
     pathArchivoPDF = pathArchivoPDF.replace(String.fromCharCode(92), String.fromCharCode(47));
-    pdf.create(templateHtml).toFile(pathArchivoPDF, function(err, pdf) {
+    let opcOrientation = oriention.toUpperCase() == 'H' ? 'landscape' : 'portrait';
+    pdf.create(templateHtml, { format: "A4", orientation: opcOrientation }).toFile(pathArchivoPDF, function(err, pdf) {
         if (err) return console.log(err);
         // console.log("\nCreacionPDF:\n", pdf);
         return pdf
@@ -63,9 +106,14 @@ let main = async(archivos, opcionLectura) => {
                 nameFile
             );
         }
-        let archivoLleno = await llenarDataPDF(dataArchivo, templateHtml);
+        let archivoLleno = '';
+        if (nameTemplate.extension == 'LS') {
+            archivoLleno = await llenarPDF_lS(dataArchivo, templateHtml);
+        } else {
+            archivoLleno = await llenarDataPDF(dataArchivo, templateHtml);
+        }
         // console.log(archivoLleno);
-        let rutaNuevoPDF = await crearPDF(archivoLleno, nameFile);
+        let rutaNuevoPDF = await crearPDF(archivoLleno, nameFile, nameTemplate.orientacion);
         console.log("RUTA PPDDFF:", rutaNuevoPDF);
         if (opcionLectura == "1") {
             await moverArchivos(nameFile, nameTemplate.carpeta);
@@ -90,9 +138,9 @@ let moverArchivos = async(nameFile, folder) => {
         let numeroC = dest2.split;
         let contador = 0;
     } else {
-        // console.log("Arch:", archivo, "\nDestino:", dest);
+        console.log("Arch:", archivo, "\nDestino:", dest);
         let moverArch = fes.moveSync(archivo, dest);
-        // console.log("Mover Archivo:", moverArch);
+        console.log("Mover Archivo:", moverArch);
     }
 };
 let parametrizaciones = async() => {

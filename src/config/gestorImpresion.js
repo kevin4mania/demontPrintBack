@@ -13,76 +13,89 @@ module.exports = {
     // RutaCarpetaArchivosLeidosPDF: "E:\\Programacion\\Node\\RespaldosPDF", //Ruta donde se guardaran los pdf completados
     // RutaCarpetaArchivosLeidosPDF: "/home/kevin/Documentos/RECURSOS_AMT_APPs/demonPrint/TEST/RespaldosPDF", //Ruta donde se guardaran los pdf completados
     RutaCarpetaArchivosLeidosPDF: "D:/KEVIN/recursosAPP/demontPrint/RespaldosPDF", //Ruta donde se guardaran los pdf completados
-    configFTP: {
-        host: "192.168.1.192",
-        port: "21",
-        user: "ftpuser",
-        password: "ftpuser",
-    },
+    // configFTP: {
+    //     host: "192.168.1.192",
+    //     port: "21",
+    //     user: "ftpuser",
+    //     password: "ftpuser",
+    // },
     Documentos: [{
             extension: "REC",
             carpeta: "FACTURAS-RECIBOS",
             modelo: "rec.html",
+            orientacion: ''
         },
         {
             extension: "FAC",
             carpeta: "FACTURAS-RECIBOS",
             modelo: "fac.html",
+            orientacion: ''
         },
         {
             extension: "CE",
             carpeta: "CE",
             modelo: "ce.html",
+            orientacion: ''
         },
         {
             extension: "HO",
             carpeta: "HO",
             modelo: "ho.html",
+            orientacion: ''
         },
         {
             extension: "HB",
             carpeta: "HOJA-BLANCA",
-            modelo: "hb.html",
+            modelo: "HB-Z-2.html",
+            orientacion: ''
         },
         {
             extension: "CA",
             carpeta: "CERTIFICADOS-ADHESIVOS",
             modelo: "ca.html",
+            orientacion: 'h'
         },
         {
             extension: "PO",
             carpeta: "PO",
             modelo: "po.html",
+            orientacion: ''
         },
         {
             extension: "NE",
             carpeta: "NE",
             modelo: "ne.html",
+            orientacion: ''
         },
         {
             extension: "MI",
             carpeta: "MICA",
             modelo: "mi.html",
+            orientacion: ''
         },
         {
             extension: "M1",
             carpeta: "MIC1",
             modelo: "m1.html",
+            orientacion: ''
         },
         {
             extension: "M2",
             carpeta: "MIC2",
             modelo: "m2.html",
+            orientacion: ''
         },
         {
             extension: "LS",
             carpeta: "LS",
-            modelo: "ls.html",
+            modelo: "ls-2.html",
+            orientacion: 'H'
         },
         {
             extension: "PB",
             carpeta: "PB",
             modelo: "pb.html",
+            orientacion: ''
         },
 
     ],
