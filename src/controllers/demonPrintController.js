@@ -37,21 +37,32 @@ let llenarPDF_lS = (dataArch, templateHtml) => {
                 templateHtml = templateHtml.replace(`{{${vec2[0].trim()}}}`, vec2[1].trim());
                 // console.log(`Typo:${typeof(templateHtml)}, \n tempalte-->:${templateHtml}`);
                 if (vec2[0].trim() == "TOTAL REGISTROS") {
-                    let codhtml = '<table>'
+                    let codhtml = ''
                     let numeroRegistros = vec2[0].trim() == 'TOTAL REGISTROS' ? vec2[1].trim() : 0;
                     // console.log(`Numero de registros:${typeof(numeroRegistros)}-->${numeroRegistros} **${typeof(parseInt(numeroRegistros))} -->${parseInt(numeroRegistros)}`);
                     for (let k = 1; k <= parseInt(numeroRegistros); k++) {
                         // codhtml += `{{TABDATOS${k}}}<br>`;
-                        codhtml += `<tr><td>{{TABDATOS${k}-1}}</td><td>{{TABDATOS${k}-2}}</td><td>{{TABDATOS${k}-3}}</td><td>{{TABDATOS${k}-4}}</td><td>{{TABDATOS${k}-5}}</td><td>{{TABDATOS${k}-6}}</td><td>{{TABDATOS${k}-7}}</td><td>{{TABDATOS${k}-8}}</td><td>{{TABDATOS${k}-9}}</td></tr>`;
+                        codhtml += `<tr>
+                        <td>
+                        <p style="margin-top:0pt; margin-bottom:0pt; line-height:150%; font-size:6pt;"><span style="font-family:Arial;">{{TABDATOS${k}-1}}</span></p></td>
+                        <td><p style="margin-top:0pt; margin-bottom:0pt; line-height:150%; font-size:6pt;"><span style="font-family:Arial;">{{TABDATOS${k}-2}}</span></p></td>
+                        <td><p style="margin-top:0pt; margin-bottom:0pt; line-height:150%; font-size:6pt;"><span style="font-family:Arial;">{{TABDATOS${k}-3}}</span></p></td>
+                        <td><p style="margin-top:0pt; margin-bottom:0pt; line-height:150%; font-size:6pt;"><span style="font-family:Arial;">{{TABDATOS${k}-4}}</span></p></td>
+                        <td><p style="margin-top:0pt; margin-bottom:0pt; line-height:150%; font-size:6pt;"><span style="font-family:Arial;">{{TABDATOS${k}-5}}</span></p></td>
+                        <td><p style="margin-top:0pt; margin-bottom:0pt; line-height:150%; font-size:6pt;"><span style="font-family:Arial;">{{TABDATOS${k}-6}}</span></p></td>
+                        <td><p style="margin-top:0pt; margin-bottom:0pt; line-height:150%; font-size:6pt;"><span style="font-family:Arial;">{{TABDATOS${k}-7}}</span></p></td>
+                        <td><p style="margin-top:0pt; margin-bottom:0pt; line-height:150%; font-size:6pt;"><span style="font-family:Arial;">{{TABDATOS${k}-8}}</span></p></td>
+                        <td><p style="margin-top:0pt; margin-bottom:0pt; line-height:150%; font-size:6pt;"><span style="font-family:Arial;">{{TABDATOS${k}-9}}</span></p></td>
+                        </tr>`;
                     }
-                    codhtml += '</table>';
+                    // codhtml += '</table>';
                     templateHtml = templateHtml.replace('{{DATA}}', codhtml);
                 }
-                console.log("\n\nTEMPALTE ACTUALIZADO:-------------\n", templateHtml);
+                // console.log("\n\nTEMPALTE ACTUALIZADO:-------------\n", templateHtml);
             } else if (vec2[0].trim() == "TABDATOS") {
                 let n = cont++;
                 let arrData = vec2[1].trim().split(',');
-                console.log(`REEMPLAZAR--> Clave:{{${vec2[0].trim()}${n}}} | valor:${vec2[1].trim()}`);
+                // console.log(`REEMPLAZAR--> Clave:{{${vec2[0].trim()}${n}}} | valor:${vec2[1].trim()}`);
                 // templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}}}`, vec2[1].trim());
                 templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-1}}`, arrData[0]);
                 templateHtml = templateHtml.replace(`{{${vec2[0].trim()}${n}-2}}`, arrData[1]);
