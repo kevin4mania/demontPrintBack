@@ -11,7 +11,10 @@ const fes = require("fs-extra");
 let leerArchivo = async(path, nameFile) => {
     console.log("Nombre a leer->", nameFile);
     // {encoding:'utf8', flag:'r'}
-    const data = fs.readFileSync(`${path}/${nameFile}`, { encoding: "utf-8", flag: "r" });
+    const data = fs.readFileSync(`${path}/${nameFile}`, { encoding: "latin1", flag: "r" });
+    console.log("***************DATA*******************");
+    console.log(data);
+    console.log("**************************************");
     return data;
 };
 let llenarDataPDF = (dataArch, templateHtml) => {
