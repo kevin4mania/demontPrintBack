@@ -80,11 +80,11 @@ let llenarPDF_lS = (dataArch, templateHtml) => {
     return templateHtml;
 }
 
-let crearPDF = async(templateHtml, nameFile, oriention) => {
+let crearPDF = async(templateHtml, nameFile, oriention, extencion) => {
     nameFile = nameFile.split(".")[0];
     // let pathArchivoPDF = `${config.RutaCarpetaArchivosLeidosPDF}/${nameFile}.pdf`;
     console.log("DIR_:", __dirname);
-    let pathArchivoPDF = `${__dirname}/../TMP/${nameFile}.pdf`;
+    let pathArchivoPDF = `${__dirname}/../TMP/${nameFile}_${extencion}.pdf`;
     pathArchivoPDF = pathArchivoPDF.replace(String.fromCharCode(92), String.fromCharCode(47));
     let opcOrientation = oriention.toUpperCase() == 'H' ? 'landscape' : 'portrait';
     pdf.create(templateHtml, { format: "A4", orientation: opcOrientation }).toFile(pathArchivoPDF, function(err, pdf) {
@@ -124,7 +124,7 @@ let main = async(archivos, opcionLectura) => {
             archivoLleno = await llenarDataPDF(dataArchivo, templateHtml);
         }
         // console.log(archivoLleno);
-        let rutaNuevoPDF = await crearPDF(archivoLleno, nameFile, nameTemplate.orientacion);
+        let rutaNuevoPDF = await crearPDF(archivoLleno, nameFile, nameTemplate.orientacion, nameTemplate.extension);
         console.log("RUTA PPDDFF:", rutaNuevoPDF);
         if (opcionLectura == "1") {
             await moverArchivos(nameFile, nameTemplate.carpeta);
