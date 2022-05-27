@@ -14,22 +14,19 @@ module.exports = {
     RutaCarpetaArchivosLeidosPDF: "K:\\TEST\\demonPrintBack\\RespaldosPDF", //Ruta donde se guardaran los pdf completados
     // RutaCarpetaArchivosLeidosPDF: "/home/kevin/Documentos/RECURSOS_AMT_APPs/demonPrint/TEST/RespaldosPDF", //Ruta donde se guardaran los pdf completados
     // RutaCarpetaArchivosLeidosPDF: "D:/KEVIN/recursosAPP/demontPrint/RespaldosPDF", //Ruta donde se guardaran los pdf completados
-    // configFTP: {
-    //     host: "192.168.1.192",
-    //     port: "21",
-    //     user: "ftpuser",
-    //     password: "ftpuser",
-    // },
+    configuracionGestor: {
+        formatoLectura: ''
+    },
     //paperSize:A2, A3, A4, A5, A6, letter, legal, tabloid, statement.    
     // Bandeja 1
     // Alimentador multiuso
     Documentos: [{
             extension: "REC",
             carpeta: "FACTURAS-RECIBOS",
-            modelo: "REC-Z.html",
+            modelo: "REC-Z22.html",
             nombreImpresora: '',
             orientacion: '',
-            bandeja: '',
+            bandeja: 'Alimentador multiuso',
             paperSize: '',
             numCopias: 1,
             monochrome: false
