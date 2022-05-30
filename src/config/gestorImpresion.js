@@ -1,6 +1,6 @@
 module.exports = {
     // IP IMPRESORA: http://172.20.68.206/
-    CarpetaModelos: "K:\\TEST\\demonPrintBack\\Modelos-nuevos", //Ruta donde estan los modelos HTML que se usaran para dar formato
+    CarpetaModelos: "K:\\TEST\\demonPrintBack\\ModelosActualizados_29-5-22", //Ruta donde estan los modelos HTML que se usaran para dar formato
     // CarpetaModelos: "/home/kevin/Documentos/RECURSOS_AMT_APPs/demonPrint/TEST/Modelos", //Ruta donde estan los modelos HTML que se usaran para dar formato
     // CarpetaModelos: "D:/KEVIN/recursosAPP/demontPrint/Modelos/Modelos", //Ruta donde estan los modelos HTML que se usaran para dar formato
     RutaCarpetaArchivos: "K:\\TEST\\demonPrintBack\\Archivos", //Ruta donde estan las carpetas con los archivos que llegan del as400 mediante ftp
@@ -15,11 +15,12 @@ module.exports = {
     // RutaCarpetaArchivosLeidosPDF: "/home/kevin/Documentos/RECURSOS_AMT_APPs/demonPrint/TEST/RespaldosPDF", //Ruta donde se guardaran los pdf completados
     // RutaCarpetaArchivosLeidosPDF: "D:/KEVIN/recursosAPP/demontPrint/RespaldosPDF", //Ruta donde se guardaran los pdf completados
     configuracionGestor: {
-        formatoLectura: ''
+        //**?configguracion para la lectura de los archivos que se generan del as400 */
+        //**!esta con 'latin1' ya que los archivos que esta generando el as400 esta en formato ANSI si el formato cambia poner "utf8" */
+        formatoLectura: 'latin1'
     },
-    //paperSize:A2, A3, A4, A5, A6, letter, legal, tabloid, statement.    
-    // Bandeja 1
-    // Alimentador multiuso
+    //**?paperSize:A2, A3, A4, A5, A6, letter, legal, tabloid, statement.    
+    //**?bandeja: Bandeja 1, Alimentador multiuso
     Documentos: [{
             extension: "REC",
             carpeta: "FACTURAS-RECIBOS",
@@ -106,39 +107,6 @@ module.exports = {
             monochrome: false
         },
         {
-            extension: "MI",
-            carpeta: "MICA",
-            modelo: "mi.html",
-            nombreImpresora: '',
-            orientacion: '',
-            bandeja: '',
-            paperSize: '',
-            numCopias: 1,
-            monochrome: false
-        },
-        {
-            extension: "M1",
-            carpeta: "MIC1",
-            modelo: "m1.html",
-            nombreImpresora: '',
-            orientacion: '',
-            bandeja: '',
-            paperSize: '',
-            numCopias: 1,
-            monochrome: false
-        },
-        {
-            extension: "M2",
-            carpeta: "MIC2",
-            modelo: "m2.html",
-            nombreImpresora: '',
-            orientacion: '',
-            bandeja: '',
-            paperSize: '',
-            numCopias: 1,
-            monochrome: false
-        },
-        {
             extension: "LS",
             carpeta: "LS",
             modelo: "LS-Z2.html",
@@ -160,6 +128,40 @@ module.exports = {
             numCopias: 1,
             monochrome: false
         },
+        //**!Formatos 'MI','M1','M2' no se utilizarn quedan para revisar la implementacion */
+        // {
+        //     extension: "MI",
+        //     carpeta: "MICA",
+        //     modelo: "mi.html",
+        //     nombreImpresora: '',
+        //     orientacion: '',
+        //     bandeja: '',
+        //     paperSize: '',
+        //     numCopias: 1,
+        //     monochrome: false
+        // },
+        // {
+        //     extension: "M1",
+        //     carpeta: "MIC1",
+        //     modelo: "m1.html",
+        //     nombreImpresora: '',
+        //     orientacion: '',
+        //     bandeja: '',
+        //     paperSize: '',
+        //     numCopias: 1,
+        //     monochrome: false
+        // },
+        // {
+        //     extension: "M2",
+        //     carpeta: "MIC2",
+        //     modelo: "m2.html",
+        //     nombreImpresora: '',
+        //     orientacion: '',
+        //     bandeja: '',
+        //     paperSize: '',
+        //     numCopias: 1,
+        //     monochrome: false
+        // },
 
     ],
 };
