@@ -1,5 +1,5 @@
 const fs = require("fs");
-const printer = require("@thiagoelg/node-printer");
+//const printer = require("@thiagoelg/node-printer");
 // const readLine = require("readline");
 const pdf = require("html-pdf");
 const pathP = require("path");
@@ -8,7 +8,7 @@ const fes = require("fs-extra");
 // const Client = require("ftp");
 
 
-let leerArchivo = async(path, nameFile) => {
+let leerArchivo = async (path, nameFile) => {
     console.log("Nombre a leer->", nameFile);
     const data = fs.readFileSync(`${path}/${nameFile}`, { encoding: config.configuracionGestor.formatoLectura, flag: "r" });
     // console.log("***************DATA*******************");
@@ -82,21 +82,21 @@ let llenarPDF_lS = (dataArch, templateHtml) => {
     return templateHtml;
 }
 
-let crearPDF = async(templateHtml, nameFile, oriention, extencion) => {
+let crearPDF = async (templateHtml, nameFile, oriention, extencion) => {
     nameFile = nameFile.split(".")[0];
     // let pathArchivoPDF = `${config.RutaCarpetaArchivosLeidosPDF}/${nameFile}.pdf`;
-    console.log("DIR_:", __dirname);
+    //console.log("DIR_:", __dirname);
     let pathArchivoPDF = `${__dirname}/../TMP/${nameFile}_${extencion}.pdf`;
     pathArchivoPDF = pathArchivoPDF.replace(String.fromCharCode(92), String.fromCharCode(47));
     let opcOrientation = oriention.toUpperCase() == 'H' ? 'landscape' : 'portrait';
-    pdf.create(templateHtml, { format: "A4", orientation: opcOrientation }).toFile(pathArchivoPDF, function(err, pdf) {
+    pdf.create(templateHtml, { format: "A4", orientation: opcOrientation }).toFile(pathArchivoPDF, function (err, pdf) {
         if (err) return console.log(err);
         // console.log("\nCreacionPDF:\n", pdf);
         return pdf
     });
     return pathArchivoPDF;
 };
-let main = async(archivos, opcionLectura) => {
+let main = async (archivos, opcionLectura) => {
     // let archivos = fs.readdirSync(pathFiles);
     // console.log("Archivos<<", archivos);
     // console.log("Archivos");
@@ -106,7 +106,7 @@ let main = async(archivos, opcionLectura) => {
         let template = pathP.join(config.CarpetaModelos, nameTemplate.modelo);
         let templateHtml = fs.readFileSync(template, { encoding: "utf8" });
         let dataArchivo = "";
-        console.log("\nOpcion-_>", opcionLectura);
+        //console.log("\nOpcion-_>", opcionLectura);
         if (opcionLectura == "1") {
             dataArchivo = await leerArchivo(
                 `${config.RutaCarpetaArchivos}/${nameTemplate.carpeta}`,
@@ -127,7 +127,7 @@ let main = async(archivos, opcionLectura) => {
         }
         // console.log(archivoLleno);
         let rutaNuevoPDF = await crearPDF(archivoLleno, nameFile, nameTemplate.orientacion, nameTemplate.extension);
-        console.log("RUTA PPDDFF:", rutaNuevoPDF);
+        //console.log("RUTA PPDDFF:", rutaNuevoPDF);
         if (opcionLectura == "1") {
             await moverArchivos(nameFile, nameTemplate.carpeta);
         }
@@ -136,43 +136,31 @@ let main = async(archivos, opcionLectura) => {
 };
 
 
-let creaDirectoriosRespaldos = async(respaldos) => {
-    if (!fs.existsSync(respaldos)) {
-        let crearCarpeta = fs.mkdirSync(respaldos, { recursive: true });
-        // console.log("Crea DIR", crearCarpeta);
-    }
-};
-let moverArchivos = async(nameFile, folder) => {
+let moverArchivos = async (nameFile, folder) => {
     let archivo = `${config.RutaCarpetaArchivos}/${folder}/${nameFile}`;
     let dest = `${config.RutaCarpetaRespaldosArchivosLeidos}/${folder}/${nameFile}`;
     // console.log("¡Existe?", fs.existsSync(dest));
     if (fs.existsSync(dest)) {
-        let dest2 = `${config.RutaCarpetaRespaldosArchivosLeidos}/${folder}/${nameFile}--1`;
-        let numeroC = dest2.split;
-        let contador = 0;
+        //console.log("EXISATE---")
+        try {
+            fs.unlinkSync(archivo);
+            //console.log("File removed");
+        } catch (err) {
+            console.error("Something wrong happened removing the file", err);
+        }
     } else {
-        console.log("Arch:", archivo, "\nDestino:", dest);
+        //console.log("Arch:", archivo, "\nDestino:", dest);
         let moverArch = fes.moveSync(archivo, dest);
-        console.log("Mover Archivo:", moverArch);
+        //console.log("Mover Archivo:", moverArch);
     }
-};
-let parametrizaciones = async() => {
-    let arrCarpetas = [];
-    config.Documentos.find((d) => {
-        arrCarpetas.push(d.carpeta);
-    });
-    for (let i = 0; i < arrCarpetas.length; i++) {
-        let archivos = fs.readdirSync(`${config.RutaCarpetaArchivos}/${arrCarpetas[i]}`);
-        await creaDirectoriosRespaldos(`${config.RutaCarpetaRespaldosArchivosLeidos}/${arrCarpetas[i]}`);
-        await main(archivos, "1");
-    }
-    return "Listo";
 };
 
+
+//parametrizaciones();
 
 
 module.exports = {
-    parametrizaciones,
+    //parametrizaciones,
     main,
     // parametrizacionesFTP,
 };

@@ -25,19 +25,28 @@ let enviarArchivos = async(req, res) => {
 };
 
 let archivosFacturasRecibos = async(req, res) => {
+    console.log("METODO")
     try {
         let arrArNFacturaJson = [];
-        let archivos = fs.readdirSync(`${config.RutaCarpetaRespaldosArchivosLeidos}/FACTURAS-RECIBOS`);
+        //\\172.21.40.5\smm\Respaldos
+        //let archivos = fs.readdirSync(`${config.RutaCarpetaRespaldosArchivosLeidos}/FACTURAS-RECIBOS`);
+        let archivos = fs.readdirSync(`\\\\172.21.40.5\\smm\\Respaldos`);
+        console.log("Arch",archivos)
         for (let va of archivos) {
-            const data = fs.readFileSync(`${config.RutaCarpetaRespaldosArchivosLeidos}/FACTURAS-RECIBOS/${va}`, { encoding: config.configuracionGestor.formatoLectura, flag: "r" });
-            let vecDataLeida = data.split("\n");
-            for (let arrlineaTexto of vecDataLeida) {
-                let arrDataFinal = arrlineaTexto.split("=");
-                if (arrDataFinal[0].trim() == "N_RECIBO") {
-                    arrArNFacturaJson.push({ name: arrDataFinal[1].trim(), filename: va });
-                }
-                continue;
+            let ext=va.split('.')[1];
+            if(ext=='REC'){
+                //const data = fs.readFileSync(`${config.RutaCarpetaRespaldosArchivosLeidos}/FACTURAS-RECIBOS/${va}`, { encoding: config.configuracionGestor.formatoLectura, flag: "r" });
+                const data = fs.readFileSync(`\\\\172.21.40.5\\smm\\Respaldos/${va}`, { encoding: config.configuracionGestor.formatoLectura, flag: "r" });
+                let vecDataLeida = data.split("\n");
+                for (let arrlineaTexto of vecDataLeida) {
+                    let arrDataFinal = arrlineaTexto.split("=");
+                    if (arrDataFinal[0].trim() == "N_RECIBO") {
+                        arrArNFacturaJson.push({ name: arrDataFinal[1].trim(), filename: va });
+                    }
+                    continue;
+                }           
             }
+            continue;
         }
         responseAPI.success(req, res, "Archivos Listos", arrArNFacturaJson);
     } catch (error) {

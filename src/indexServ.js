@@ -25,8 +25,8 @@ app.use(morgan("dev")); //dev
 //     });
 
 app.use("/api/gestorImpresion", require("./routes/servicePrintRouter"));
-
-app.listen(process.env.PORT, (err) => {
+const PORT=5004
+app.listen(PORT, (err) => {
     if (err) throw new Error(err);
-    console.log("Servidor corriendo en puerto", process.env.PORT);
+    console.log("Servidor corriendo en puerto", PORT);
 });

@@ -21,18 +21,19 @@ let imprimir = async(nameFile) => {
 let moverArchivos = async(nameFile, folder) => {
     let archivo = `${folder}/${nameFile}`;
     let dest = `${config.RutaCarpetaArchivosLeidosPDF}/${nameFile}`;
-    console.log("Arch:", archivo, "\nDestino:", dest);
+    //console.log("Arch:", archivo, "\nDestino:", dest);
     // console.log("¡Existe?", fs.existsSync(dest));
     if (fs.existsSync(dest)) {
+        //console.log("EXISATE---")
         try {
             fs.unlinkSync(archivo);
-            console.log("File removed");
+            //console.log("File removed");
         } catch (err) {
             console.error("Something wrong happened removing the file", err);
         }
     } else {
         let moverArch = fes.moveSync(archivo, dest);
-        console.log("Mover Archivo:", moverArch);
+        //console.log("Mover Archivo:", moverArch);
     }
     return "movido";
 };
@@ -58,7 +59,7 @@ let imprimirWIN = async(pathPDF, namePDF) => {
         })
         .then(async(res) => {
             let msgMueve = await moverArchivos(namePDF, pathPDF);
-            console.log(msgMueve);
+            //console.log(msgMueve);
             console.log("msg IM:", res);
             return res;
         })
@@ -68,14 +69,14 @@ let imprimirWIN = async(pathPDF, namePDF) => {
 };
 
 let main = async() => {
-    console.log("DIR_:", __dirname);
+    //console.log("DIR_:", __dirname);
     let pathPDF = `${__dirname}/TMP`;
     let archivos = fs.readdirSync(pathPDF);
     console.log("TMP Archivos", archivos);
     for (let archPdf of archivos) {
         let msgImpre = await imprimirWIN(pathPDF, archPdf);
-        console.log(msgImpre);
+        //console.log(msgImpre);
     }
 };
 
-main().then(console.log).catch(console.log);
+main();
